@@ -1,9 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
+import { Permission } from './permission.schema';
+import { Role } from './role.schema';
 
 export type UserDocument = HydratedDocument<User>;
 
-@Schema()
+@Schema({ timestamps: true })
 export class User {
   @Prop({
     required: true,
@@ -37,6 +39,15 @@ export class User {
     maxlength: 255,
   })
   password: string;
+
+  @Prop({ ref: 'permissions' })
+  permissions: Permission[];
+
+  @Prop({ ref: 'roles', required: true })
+  roles: number;
+
+  @Prop()
+  active: boolean;
 
   @Prop()
   createdAt?: Date;

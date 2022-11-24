@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseFilters,
+  Logger,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -16,10 +17,12 @@ import { MongoExceptionFilter } from 'src/filters/mongoException/mongoException.
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+  private readonly logger = new Logger('Controller User');
 
   @Post()
   @UseFilters(MongoExceptionFilter)
   create(@Body() createUserDto: CreateUserDto) {
+    console.log(ROLES.ADMINISTRATOR);
     return this.usersService.create(createUserDto);
   }
 

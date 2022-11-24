@@ -19,11 +19,16 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         : HttpStatus.INTERNAL_SERVER_ERROR;
     console.log();
     const responseMessage = (message) => {
-      const exceptionMessage = exception.getResponse()['message'];
+      let exceptionMessage = message;
+      try {
+        exceptionMessage = exception.getResponse()['message'];
+      } catch (e) {
+        exceptionMessage = message;
+      }
       response.status(status).json({
         statusCode: status,
         path: request.url,
-        errorMessage: exceptionMessage ? exceptionMessage : message,
+        errorMessage: exceptionMessage,
       });
     };
 
