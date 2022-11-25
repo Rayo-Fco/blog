@@ -13,6 +13,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { MongoExceptionFilter } from 'src/filters/mongoException/mongoException.filter';
+import ROLES from './users.roles';
 
 @Controller('users')
 export class UsersController {
@@ -22,7 +23,7 @@ export class UsersController {
   @Post()
   @UseFilters(MongoExceptionFilter)
   create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+    return this.usersService.create({ ...createUserDto, roles: ROLES.USER });
   }
 
   @Get()

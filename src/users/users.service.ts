@@ -5,7 +5,6 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Role } from './schema/role.schema';
 import { User, UserDocument } from './schema/user.schema';
-import ROLES from './users.roles';
 
 @Injectable()
 export class UsersService {
@@ -14,11 +13,7 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const user = await this.userModel.create({
-      ...createUserDto,
-      roles: ROLES.USER,
-    });
-    return user;
+    return await this.userModel.create(createUserDto);
   }
 
   async findAll(): Promise<User[]> {
