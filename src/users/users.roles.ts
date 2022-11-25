@@ -2,6 +2,6 @@ const ROLES = {
   ADMINISTRATOR: 0,
   SUPERVISOR: 1,
   EDITOR: 2,
+  USER: 3,
 };
-
-module.exports.ROLES = ROLES;
+export default ROLES;

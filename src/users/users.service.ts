@@ -5,6 +5,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Role } from './schema/role.schema';
 import { User, UserDocument } from './schema/user.schema';
+import ROLES from './users.roles';
 
 @Injectable()
 export class UsersService {
@@ -12,9 +13,12 @@ export class UsersService {
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
   ) {}
 
-  create(createUserDto: CreateUserDto): Promise<User> {
-    //console.log(ROLES.EDITOR, [ROLES.EDITOR]);
-    return this.userModel.create({ ...createUserDto, roles: 0 });
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    const user = await this.userModel.create({
+      ...createUserDto,
+      roles: ROLES.USER,
+    });
+    return user;
   }
 
   async findAll(): Promise<User[]> {

@@ -22,7 +22,6 @@ export class UsersController {
   @Post()
   @UseFilters(MongoExceptionFilter)
   create(@Body() createUserDto: CreateUserDto) {
-    console.log(ROLES.ADMINISTRATOR);
     return this.usersService.create(createUserDto);
   }
 
