@@ -1,26 +1,34 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, MaxLength, IsEmail } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  IsEmail,
+  Length,
+  Matches,
+} from 'class-validator';
 
 export class CreateUserDto {
   @IsString({ message: 'name has to be text only' })
   @IsNotEmpty({ message: 'name is required' })
+  @Length(3, 40, {
+    message: 'name is invalid',
+  })
   @ApiProperty({ example: 'John' })
   readonly name: string;
 
   @IsString()
-  @IsNotEmpty({
-    message: 'lastname is required',
-    context: {
-      errorCode: 1003,
-      developerNote: 'The validated string must contain 32 or more characters.',
-    },
+  @IsNotEmpty({ message: 'lastname is required' })
+  @Length(3, 40, {
+    message: 'lastname is invalid',
   })
   @ApiProperty({ example: 'Herrera' })
   readonly lastName: string;
 
   @IsEmail()
   @IsString()
-  @MaxLength(250)
+  @Length(6, 120, {
+    message: 'email is invalid',
+  })
   @ApiProperty({ example: 'johnherrera@gmail.com' })
   readonly email: string;
 
@@ -31,12 +39,16 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty()
+  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d].{6,}$/, {
+    message:
+      'the password must have at least one uppercase letter, one lowercase letter, and one number.',
+  })
   @ApiProperty({ example: '1234ABC' })
   readonly password: string;
 
-  @ApiProperty({ example: '2021-01-15T06:31:15Z' })
   readonly createdAt?: Date;
 
-  @ApiProperty({ example: '2021-01-15T06:31:15Z' })
   readonly updatedAt?: Date;
+
+  readonly roles: number;
 }

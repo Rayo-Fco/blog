@@ -12,7 +12,7 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { MongoExceptionFilter } from 'src/filters/mongoException/mongoException.filter';
+import { User } from './schema/user.schema';
 
 @Controller('users')
 export class UsersController {
@@ -20,7 +20,6 @@ export class UsersController {
   private readonly logger = new Logger('Controller User');
 
   @Post()
-  @UseFilters(MongoExceptionFilter)
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
@@ -31,7 +30,7 @@ export class UsersController {
   }
 
   @Get(':email')
-  findOne(@Param('email') email: string) {
+  findOne(@Param('email') email: string): Promise<User> {
     return this.usersService.findOne(email);
   }
 
