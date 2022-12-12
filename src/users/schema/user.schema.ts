@@ -33,6 +33,14 @@ export class User {
 
   @Prop({
     required: true,
+    minlength: 3,
+    maxlength: 40,
+    lowercase: true,
+  })
+  country: string;
+
+  @Prop({
+    required: true,
     trim: true,
     minlength: 6,
     maxlength: 255,
