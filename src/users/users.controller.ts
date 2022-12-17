@@ -8,21 +8,19 @@ import {
   Delete,
   UseFilters,
   Logger,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './schema/user.schema';
+import { AuthRoles } from 'src/auth/roles.decorator';
+import { Roles } from './roles.enum';
 
+@AuthRoles(Roles.Admin)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   private readonly logger = new Logger('Controller User');
-
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
-  }
 
   @Get()
   findAll() {

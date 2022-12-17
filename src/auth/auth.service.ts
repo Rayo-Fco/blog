@@ -4,10 +4,14 @@ import { UsersService } from 'src/users/users.service';
 import { RegisterResponse } from './auth.interface';
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { RegisterAuthDto } from './dto/register-auth.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private jwtService: JwtService,
+  ) {}
 
   async validateUser(email: string, password: string): Promise<User | null> {
     const user = await this.usersService.findOne(email);
@@ -20,13 +24,20 @@ export class AuthService {
     return user;
   }
 
+  tokenLogin(user: User) {
+    return this.jwtService.sign({
+      email: user.email,
+      name: user.name,
+      lastName: user.lastName,
+      role: user.roles,
+    });
+  }
+
   async login(LoginAuthDto: LoginAuthDto): Promise<any> {
     const { password, email } = LoginAuthDto;
     const user = await this.validateUser(email, password);
-    console.log(user, 'EE');
     if (!user) throw new BadRequestException('email or password are incorrect');
-
-    return 'login exitoso';
+    return { token: this.tokenLogin(user) };
   }
 
   async register(RegisterAuthDto: RegisterAuthDto): Promise<RegisterResponse> {

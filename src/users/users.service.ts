@@ -5,11 +5,10 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Role } from './schema/role.schema';
 import { User, UserDocument } from './schema/user.schema';
-import ROLES from './users.roles';
 import * as bcrypt from 'bcrypt';
+import { Roles } from './roles.enum';
 @Injectable()
 export class UsersService {
-  private readonly userRole = ROLES.USER;
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
   ) {}
@@ -29,7 +28,7 @@ export class UsersService {
     if (user) throw new BadRequestException(['email is already registered']);
     await this.userModel.create({
       ...createUserDto,
-      roles: this.userRole,
+      roles: Roles.User,
       password: await this.hashPassword(createUserDto.password),
     });
     return 'user created';
